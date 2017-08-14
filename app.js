@@ -24,9 +24,9 @@ function addNewItem(e){
 function populateList(todos = [], todoList){ // todos = [] ES6 - make the items to be default array to blank incase there are no value inside 
 	todoList.innerHTML = todos.map((todo, i) => {
       return `
-        <li>
-          <input type="checkbox" data-index=${i} id="item${i}" ${todo.done ? 'checked' : ''} />
-          <label for="item${i}">${todo.itemName}</label> 
+        <li class="list-group-item">
+          <input class="form-check-input" type="checkbox" data-index=${i} id="item${i}" ${todo.done ? 'checked' : ''} />
+          <label class="form-check-label" for="item${i}">${todo.itemName}</label> 
         </li>
         `; 	
 	}).join(''); //.join() is going to take the array to string
