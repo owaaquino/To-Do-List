@@ -7,6 +7,45 @@
 body, html {
 }
 
-ul, li {
+div {
+	margin: 20px 5px;
+}
+
+li {
+	margin: 5px 0;
 	list-style: none;
+}
+
+button {
+	margin: 0 1px;
+}
+
+.completedTask li label {
+	background-color: #DCE2E2;
+}
+
+#headline {
+	text-align: center;
+}
+
+footer {
+	text-align: center;
+}
+
+footer p span {
+	color: #F94F4F;
+}
+
+@media screen and (min-width: 500px){
+	.wrapper {
+		max-width: 90%;
+		margin: 0 auto;
+	}
+
+ul {
+	margin: 10px;
+}
+	button {
+		margin: 0 3px;
+	}
 }
