@@ -43,6 +43,30 @@ function populateList(todos = [], todoList){ // todos = [] ES6 - make the items 
 	}).join(''); //.join() is going to take the array to string
 };
 
+//fn to add item checked on the new localStorage
+function addItemToLocal(item, array, localStorageID){
+	//create a new item with done = true then add that item to the array 
+	item = {
+		itemName : item,
+		done: true
+	};
+	// add item to completedTodos array
+	array.push(item);
+	populateList(array, taskList);
+	localStorage.setItem(localStorageID, JSON.stringify(array));
+}
+
+//fn to remove item checked on the current localStorage
+function removeItemToLocal(item, array, localStorageID){
+	//remove toggled item in the array 
+	const itemIndex = array.findIndex(task => task.itemName === item); //find the index id of the item by name
+	
+	array.splice(itemIndex, 1); //remove item 
+
+	//then update the localstorage
+	localStorage.setItem(localStorageID, JSON.stringify(array));
+}
+
 function toggleTaskCompleted(e){
 	if (!e.target.matches('input')) return; // skip if event trigger is not an input element
 	if(e.target.checked){
@@ -50,24 +74,9 @@ function toggleTaskCompleted(e){
 		const itemLabel = itemParent.querySelector('label').textContent;
 
 		completedTask.appendChild(itemParent);
-		//remove toggled item in the array 
-		const itemIndex = todoTasks.findIndex(task => task.itemName === itemLabel); //find the index id of the item by name
-		
-		todoTasks.splice(itemIndex, 1); //remove item 
 
-		//then update the localstorage
-		localStorage.setItem('todolist', JSON.stringify(todoTasks));
-
-		//create a new item with done = true then add that item to the array 
-		item = {
-			itemName : itemLabel,
-			done: true
-		};
-		// add item to completedTodos array
-		completedTodos.push(item);
-		populateList(completedTodos, completedTask);
-		localStorage.setItem('completedlist', JSON.stringify(completedTodos));
-
+		removeItemToLocal(itemLabel, todoTasks, 'todolist');
+		addItemToLocal(itemLabel, completedTodos, 'completedlist');
 	}else{
 		console.log('incomplete task!');
 		let itemParent = e.target.parentNode.parentNode;
@@ -75,23 +84,26 @@ function toggleTaskCompleted(e){
 
 		taskList.appendChild(itemParent);
 
-		//remove toggled item in the array 
-		const itemIndex = completedTodos.findIndex(task => task.itemName === itemLabel); //find the index id of the item by name
+		removeItemToLocal(itemLabel, completedTodos, 'completedlist');
+		addItemToLocal(itemLabel, todoTasks, 'todolist');
+
+		// //remove toggled item in the array 
+		// const itemIndex = completedTodos.findIndex(task => task.itemName === itemLabel); //find the index id of the item by name
 		
-		completedTodos.splice(itemIndex, 1); //remove item 
+		// completedTodos.splice(itemIndex, 1); //remove item 
 
-		//then update the localstorage
-		localStorage.setItem('completedlist', JSON.stringify(completedTodos));
+		// //then update the localstorage
+		// localStorage.setItem('completedlist', JSON.stringify(completedTodos));
 
-		//create a new item with done = true then add that item to the array 
-		item = {
-			itemName : itemLabel,
-			done: false
-		};
-		// add item to completedTodos array
-		todoTasks.push(item);
-		populateList(todoTasks, taskList);
-		localStorage.setItem('todolist', JSON.stringify(todoTasks));
+		// //create a new item with done = true then add that item to the array 
+		// item = {
+		// 	itemName : itemLabel,
+		// 	done: false
+		// };
+		// // add item to completedTodos array
+		// todoTasks.push(item);
+		// populateList(todoTasks, taskList);
+		// localStorage.setItem('todolist', JSON.stringify(todoTasks));
 	}
 
 }
