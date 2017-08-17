@@ -5,6 +5,13 @@ const completedTask = document.querySelector('.completedTask');
 const todoTasks = JSON.parse(localStorage.getItem('todolist')) || [];
 const completedTodos = JSON.parse(localStorage.getItem('completedlist')) || [];
 
+function getCurrentDate(){
+	const date = document.querySelector('#currentDate');
+	let currentDate = new Date();
+	let dateToday = (`Today date is ${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`);
+	date.innerHTML = `<p>${dateToday}</p>`;
+}
+
 function addNewItem(e){
 	e.preventDefault();
 	const newItem = (this.querySelector('[name=newItem]')).value; //get value of the input item box
@@ -89,20 +96,33 @@ function toggleTaskCompleted(e){
 
 }
 
+function deleteItem(e) {
+  if (!e.target.matches('.deleteBtn')) return;
+  let listItem = e.target.parentNode;
+  console.log(listItem);
+  let ul = listItem.parentNode;
+
+  // // //Remove the parent list item from the ul
+  ul.removeChild(listItem);
+}
+
+populateList(todoTasks, taskList);
+populateList(completedTodos, completedTask);
+getCurrentDate();
+
+const taskListItems = taskList.querySelectorAll('li');
+const completedTaskItems = completedTask.querySelectorAll('li');
+
 addItemForm.addEventListener('submit', addNewItem);
 
 taskList.addEventListener('change', toggleTaskCompleted);
 completedTask.addEventListener('change', toggleTaskCompleted);
 
-populateList(todoTasks, taskList);
-populateList(completedTodos, completedTask);
+taskListItems.forEach(item => item.addEventListener('click', deleteItem));
+completedTaskItems.forEach(item => item.addEventListener('click', deleteItem));
+
+// todoTaskItem.forEach(item => item.addEventListener('click', deleteItem));
 
 
-// function getCurrentDate(){
-// 	const date = document.querySelector('#currentDate');
-// 	let currentDate = new Date();
-// 	let dateToday = (`${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`);
-// 	date.innerHTML = `<p>${dateToday}</p>`;
-// }
 
-// getCurrentDate();
+
