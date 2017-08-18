@@ -31,12 +31,14 @@ function addNewItem(e){
 function populateList(todos = [], todoList){ // todos = [] ES6 - make the items to be default array to blank incase there are no value inside 
 	todoList.innerHTML = todos.map((todo, i) => {
       return `
-        <li class="input-group">
+        <li class="input-group editOff">
         	<span class="input-group-addon">
          		<input  type="checkbox" data-index=${i} id="item${i}" ${todo.done ? 'checked' : ''} />
 	      	</span>
           <label class="form-control" aria-label="Text input with checkbox" for="item${i}">${todo.itemName}</label> 
+          <input type="text" class="form-control" value="${todo.itemName}">
           <button class="editBtn btn btn-info">Edit</button>
+          <button class="saveBtn btn btn-info">Save</button>
           <button class="deleteBtn btn btn-danger">Delete</button>
         </li>
         `; 	
@@ -44,25 +46,18 @@ function populateList(todos = [], todoList){ // todos = [] ES6 - make the items 
 };
 
 //fn to add item checked on the new localStorage
-function addItemToLocal(item, array, localStorageID){
-	//create a new item with done = true then add that item to the array 
-	item = {
-		itemName : item,
-		done: true
-	};
+function addItemToLocal(item, array, ul, localStorageID){
 	// add item to completedTodos array
 	array.push(item);
-	populateList(array, taskList);
+	populateList(array, ul);
 	localStorage.setItem(localStorageID, JSON.stringify(array));
 }
 
 //fn to remove item checked on the current localStorage
 function removeItemToLocal(item, array, localStorageID){
-	//remove toggled item in the array 
-	const itemIndex = array.findIndex(task => task.itemName === item); //find the index id of the item by name
-	
+	// find the index id of the item by name
+	const itemIndex = array.findIndex(task => task.itemName === item); //
 	array.splice(itemIndex, 1); //remove item 
-
 	//then update the localstorage
 	localStorage.setItem(localStorageID, JSON.stringify(array));
 }
@@ -76,7 +71,14 @@ function toggleTaskCompleted(e){
 		completedTask.appendChild(itemParent);
 
 		removeItemToLocal(itemLabel, todoTasks, 'todolist');
-		addItemToLocal(itemLabel, completedTodos, 'completedlist');
+
+		//create a new item with done = true then add that item to the array 
+		item = {
+			itemName : itemLabel,
+			done: true
+		};
+
+		addItemToLocal(item, completedTodos, completedTask, 'completedlist');
 	}else{
 		console.log('incomplete task!');
 		let itemParent = e.target.parentNode.parentNode;
@@ -85,37 +87,41 @@ function toggleTaskCompleted(e){
 		taskList.appendChild(itemParent);
 
 		removeItemToLocal(itemLabel, completedTodos, 'completedlist');
-		addItemToLocal(itemLabel, todoTasks, 'todolist');
 
-		// //remove toggled item in the array 
-		// const itemIndex = completedTodos.findIndex(task => task.itemName === itemLabel); //find the index id of the item by name
-		
-		// completedTodos.splice(itemIndex, 1); //remove item 
+		//create a new item with done = false then add that item to the array 
+		item = {
+			itemName : itemLabel,
+			done: false
+		};
 
-		// //then update the localstorage
-		// localStorage.setItem('completedlist', JSON.stringify(completedTodos));
-
-		// //create a new item with done = true then add that item to the array 
-		// item = {
-		// 	itemName : itemLabel,
-		// 	done: false
-		// };
-		// // add item to completedTodos array
-		// todoTasks.push(item);
-		// populateList(todoTasks, taskList);
-		// localStorage.setItem('todolist', JSON.stringify(todoTasks));
+		addItemToLocal(item, todoTasks, taskList, 'todolist');
 	}
-
 }
 
-function deleteItem(e) {
-  if (!e.target.matches('.deleteBtn')) return;
-  let listItem = e.target.parentNode;
-  console.log(listItem);
-  let ul = listItem.parentNode;
+function buttons(e) {
+	if(e.target.tagName === 'BUTTON'){
+		const li = e.target.parentNode;
+		const deleteBtn = e.target.matches('.deleteBtn');
+		const editBtn = e.target.matches('.editBtn');
+		const saveBtn = e.target.matches('.saveBtn');
 
-  // // //Remove the parent list item from the ul
-  ul.removeChild(listItem);
+		if(deleteBtn){
+		  let listItem = e.target.parentNode;
+		  let ul = listItem.parentNode;
+
+		  // // //Remove the parent list item from the ul
+		  ul.removeChild(listItem);
+
+		}else if(editBtn){
+			//add class .editOn remove class .editOff
+			li.classList.add('editOn');
+			li.classList.remove('editOff');
+		}else if(saveBtn){
+			//remove class .editOn add class .editOff
+			li.classList.add('editOff');
+			li.classList.remove('editOn');
+		}
+	}
 }
 
 populateList(todoTasks, taskList);
@@ -127,12 +133,11 @@ const completedTaskItems = completedTask.querySelectorAll('li');
 
 addItemForm.addEventListener('submit', addNewItem);
 
+taskListItems.forEach(item => item.addEventListener('click', buttons));
+completedTaskItems.forEach(item => item.addEventListener('click', buttons));
+
 taskList.addEventListener('change', toggleTaskCompleted);
 completedTask.addEventListener('change', toggleTaskCompleted);
-
-taskListItems.forEach(item => item.addEventListener('click', deleteItem));
-completedTaskItems.forEach(item => item.addEventListener('click', deleteItem));
-
 // todoTaskItem.forEach(item => item.addEventListener('click', deleteItem));
 
 

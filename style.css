@@ -28,6 +28,22 @@ button {
 	text-align: center;
 }
 
+.editOff input[type=text]{
+	display: none;
+}
+
+.editOn label.form-control{
+	display: none;
+}
+
+.editOff .saveBtn{
+	display: none;
+}
+
+.editOn .editBtn{
+	display: none;
+}
+
 footer {
 	text-align: center;
 }
