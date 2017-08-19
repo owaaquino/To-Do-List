@@ -112,6 +112,8 @@ function buttons(e) {
 		  // // //Remove the parent list item from the ul
 		  ul.removeChild(listItem);
 
+		  removeItemToLocal(item, array, localStorageID);
+
 		}else if(editBtn){
 			//add class .editOn remove class .editOff
 			li.classList.add('editOn');
@@ -128,17 +130,13 @@ populateList(todoTasks, taskList);
 populateList(completedTodos, completedTask);
 getCurrentDate();
 
-const taskListItems = taskList.querySelectorAll('li');
-const completedTaskItems = completedTask.querySelectorAll('li');
-
 addItemForm.addEventListener('submit', addNewItem);
 
-taskListItems.forEach(item => item.addEventListener('click', buttons));
-completedTaskItems.forEach(item => item.addEventListener('click', buttons));
+taskList.addEventListener('click', buttons);
+completedTask.addEventListener('click', buttons);
 
 taskList.addEventListener('change', toggleTaskCompleted);
 completedTask.addEventListener('change', toggleTaskCompleted);
-// todoTaskItem.forEach(item => item.addEventListener('click', deleteItem));
 
 
 
