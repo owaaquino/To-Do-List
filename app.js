@@ -62,8 +62,18 @@ function removeItemToLocal(item, array, localStorageID){
 	localStorage.setItem(localStorageID, JSON.stringify(array));
 }
 
+//fn to update existing item 
+function updateItemToLocal(itemLabel){
+	updateItem = {
+		itemName : itemLabel,
+		done: true
+	};
+
+	addItemToLocal(updateItem, array, ul, localStorageID);
+}
+
 function toggleTaskCompleted(e){
-	if (!e.target.matches('input')) return; // skip if event trigger is not an input element
+	if (!e.target.matches('input[type=checkbox]')) return; // skip if event trigger is not an input element
 	if(e.target.checked){
 		const itemParent = e.target.parentNode.parentNode;
 		const itemLabel = itemParent.querySelector('label').textContent;
@@ -98,6 +108,23 @@ function toggleTaskCompleted(e){
 	}
 }
 
+function whichArray(parentNode) {
+	if(parentNode.classList.contains('tasks')){
+		return todoTasks;
+	}else{
+		return completedTodos;
+	};
+}
+
+function whichStorage(storage) {
+	if(storage.classList.contains('tasks')){
+		return 'todolist';
+	}else{
+		return 'completedlist';
+	};
+}
+
+
 function buttons(e) {
 	if(e.target.tagName === 'BUTTON'){
 		const li = e.target.parentNode;
@@ -106,13 +133,12 @@ function buttons(e) {
 		const saveBtn = e.target.matches('.saveBtn');
 
 		if(deleteBtn){
-		  let listItem = e.target.parentNode;
-		  let ul = listItem.parentNode;
-
+		  const ul = li.parentNode;
+		  const item = li.querySelector('label').textContent;
 		  // // //Remove the parent list item from the ul
-		  ul.removeChild(listItem);
+		  ul.removeChild(li);
 
-		  removeItemToLocal(item, array, localStorageID);
+		  removeItemToLocal(item, whichArray(ul), whichStorage(ul));
 
 		}else if(editBtn){
 			//add class .editOn remove class .editOff
@@ -122,6 +148,26 @@ function buttons(e) {
 			//remove class .editOn add class .editOff
 			li.classList.add('editOff');
 			li.classList.remove('editOn');
+
+			const ul = li.parentNode;
+			const item = li.querySelector('label').textContent;
+
+			//remove item in the local storage
+			removeItemToLocal(item, whichArray(ul), whichStorage(ul));
+			//value of input = textcontent of label
+
+			const label = li.querySelector('label');
+			const input = li.querySelector('input[type=text]');
+
+			label.textContent = input.value;
+
+			updateItem = {
+				itemName : label.textContent,
+				done: `${ul.classList.contains('tasks') ? true : false}`
+			};
+
+			addItemToLocal(updateItem, whichArray(ul), ul, whichStorage(ul));
+
 		}
 	}
 }
