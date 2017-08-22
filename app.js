@@ -8,7 +8,7 @@ const completedTodos = JSON.parse(localStorage.getItem('completedlist')) || [];
 function getCurrentDate(){
 	const date = document.querySelector('#currentDate');
 	let currentDate = new Date();
-	let dateToday = (`Today date is ${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`);
+	let dateToday = (`${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`);
 	date.innerHTML = `<p>${dateToday}</p>`;
 }
 
@@ -37,8 +37,9 @@ function populateList(todos = [], todoList){ // todos = [] ES6 - make the items 
 	      	</span>
           <label class="form-control" aria-label="Text input with checkbox" for="item${i}">${todo.itemName}</label> 
           <input type="text" class="form-control" value="${todo.itemName}">
+
           <button class="editBtn btn btn-info">Edit</button>
-          <button class="saveBtn btn btn-info">Save</button>
+          <button class="saveBtn btn btn-success">Save</button>
           <button class="deleteBtn btn btn-danger">Delete</button>
         </li>
         `; 	
@@ -62,16 +63,6 @@ function removeItemToLocal(item, array, localStorageID){
 	localStorage.setItem(localStorageID, JSON.stringify(array));
 }
 
-//fn to update existing item 
-function updateItemToLocal(itemLabel){
-	updateItem = {
-		itemName : itemLabel,
-		done: true
-	};
-
-	addItemToLocal(updateItem, array, ul, localStorageID);
-}
-
 function toggleTaskCompleted(e){
 	if (!e.target.matches('input[type=checkbox]')) return; // skip if event trigger is not an input element
 	if(e.target.checked){
@@ -90,7 +81,6 @@ function toggleTaskCompleted(e){
 
 		addItemToLocal(item, completedTodos, completedTask, 'completedlist');
 	}else{
-		console.log('incomplete task!');
 		let itemParent = e.target.parentNode.parentNode;
 		const itemLabel = itemParent.querySelector('label').textContent;
 
@@ -124,6 +114,12 @@ function whichStorage(storage) {
 	};
 }
 
+function whichParent(parentNode){
+	if(parentNode.classList.contains('tasks')){
+		return false;
+	}
+}
+
 
 function buttons(e) {
 	if(e.target.tagName === 'BUTTON'){
@@ -140,15 +136,21 @@ function buttons(e) {
 
 		  removeItemToLocal(item, whichArray(ul), whichStorage(ul));
 
-		}else if(editBtn){
+		}
+
+		if(editBtn){
 			//add class .editOn remove class .editOff
 			li.classList.add('editOn');
 			li.classList.remove('editOff');
-		}else if(saveBtn){
+			li.querySelector('input[type=checkbox').disabled = true;	
+		}
+
+		if(saveBtn){
 			//remove class .editOn add class .editOff
 			li.classList.add('editOff');
 			li.classList.remove('editOn');
-
+			console.log(e.target.parentNode);
+			console.log(e.target.parentNode.parentNode);
 			const ul = li.parentNode;
 			const item = li.querySelector('label').textContent;
 
@@ -160,10 +162,9 @@ function buttons(e) {
 			const input = li.querySelector('input[type=text]');
 
 			label.textContent = input.value;
-
 			updateItem = {
 				itemName : label.textContent,
-				done: `${ul.classList.contains('tasks') ? true : false}`
+				done: whichParent(ul)
 			};
 
 			addItemToLocal(updateItem, whichArray(ul), ul, whichStorage(ul));
@@ -181,8 +182,10 @@ addItemForm.addEventListener('submit', addNewItem);
 taskList.addEventListener('click', buttons);
 completedTask.addEventListener('click', buttons);
 
-taskList.addEventListener('change', toggleTaskCompleted);
-completedTask.addEventListener('change', toggleTaskCompleted);
+taskList.addEventListener('click', toggleTaskCompleted);
+completedTask.addEventListener('click', toggleTaskCompleted);
+
+
 
 
 
