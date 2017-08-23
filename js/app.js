@@ -5,12 +5,6 @@ const completedTask = document.querySelector('.completedTask');
 const todoTasks = JSON.parse(localStorage.getItem('todolist')) || [];
 const completedTodos = JSON.parse(localStorage.getItem('completedlist')) || [];
 
-function getCurrentDate(){
-	const date = document.querySelector('#currentDate');
-	let currentDate = new Date();
-	let dateToday = (`${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`);
-	date.innerHTML = `<p>${dateToday}</p>`;
-}
 
 function addNewItem(e){
 	e.preventDefault();
@@ -23,8 +17,9 @@ function addNewItem(e){
 
 	todoTasks.push(item);
 	populateList(todoTasks, taskList);
-	localStorage.setItem('todolist', JSON.stringify(todoTasks));
+	localStorage.setItem('todolist', JSON.stringify(todoTasks));	
 	this.reset(); // reset the form to empty value
+
 }
 
 //populoateList takes two params one for the items that needed to be displayed and another for where that items you want to display in the page. 
@@ -44,24 +39,8 @@ function populateList(todos = [], todoList){ // todos = [] ES6 - make the items 
         </li>
         `; 	
 	}).join(''); //.join() is going to take the array to string
+
 };
-
-//fn to add item checked on the new localStorage
-function addItemToLocal(item, array, ul, localStorageID){
-	// add item to completedTodos array
-	array.push(item);
-	populateList(array, ul);
-	localStorage.setItem(localStorageID, JSON.stringify(array));
-}
-
-//fn to remove item checked on the current localStorage
-function removeItemToLocal(item, array, localStorageID){
-	// find the index id of the item by name
-	const itemIndex = array.findIndex(task => task.itemName === item); //
-	array.splice(itemIndex, 1); //remove item 
-	//then update the localstorage
-	localStorage.setItem(localStorageID, JSON.stringify(array));
-}
 
 function toggleTaskCompleted(e){
 	if (!e.target.matches('input[type=checkbox]')) return; // skip if event trigger is not an input element
@@ -98,28 +77,6 @@ function toggleTaskCompleted(e){
 	}
 }
 
-function whichArray(parentNode) {
-	if(parentNode.classList.contains('tasks')){
-		return todoTasks;
-	}else{
-		return completedTodos;
-	};
-}
-
-function whichStorage(storage) {
-	if(storage.classList.contains('tasks')){
-		return 'todolist';
-	}else{
-		return 'completedlist';
-	};
-}
-
-function whichParent(parentNode){
-	if(parentNode.classList.contains('tasks')){
-		return false;
-	}
-}
-
 
 function buttons(e) {
 	if(e.target.tagName === 'BUTTON'){
@@ -149,8 +106,6 @@ function buttons(e) {
 			//remove class .editOn add class .editOff
 			li.classList.add('editOff');
 			li.classList.remove('editOn');
-			console.log(e.target.parentNode);
-			console.log(e.target.parentNode.parentNode);
 			const ul = li.parentNode;
 			const item = li.querySelector('label').textContent;
 
@@ -173,17 +128,7 @@ function buttons(e) {
 	}
 }
 
-populateList(todoTasks, taskList);
-populateList(completedTodos, completedTask);
-getCurrentDate();
 
-addItemForm.addEventListener('submit', addNewItem);
-
-taskList.addEventListener('click', buttons);
-completedTask.addEventListener('click', buttons);
-
-taskList.addEventListener('click', toggleTaskCompleted);
-completedTask.addEventListener('click', toggleTaskCompleted);
 
 
 
