@@ -6,6 +6,8 @@ const todoTasks = JSON.parse(localStorage.getItem('todolist')) || [];
 const completedTodos = JSON.parse(localStorage.getItem('completedlist')) || [];
 
 
+// ADD ITEM FUNCTION
+
 function addNewItem(e){
 	e.preventDefault();
 	const newItem = (this.querySelector('[name=newItem]')).value; //get value of the input item box
@@ -22,25 +24,7 @@ function addNewItem(e){
 
 }
 
-//populoateList takes two params one for the items that needed to be displayed and another for where that items you want to display in the page. 
-function populateList(todos = [], todoList){ // todos = [] ES6 - make the items to be default array to blank incase there are no value inside 
-	todoList.innerHTML = todos.map((todo, i) => {
-      return `
-        <li class="input-group editOff">
-        	<span class="input-group-addon">
-         		<input  type="checkbox" data-index=${i} id="item${i}" ${todo.done ? 'checked' : ''} />
-	      	</span>
-          <label class="form-control" aria-label="Text input with checkbox" for="item${i}">${todo.itemName}</label> 
-          <input type="text" class="form-control" value="${todo.itemName}">
-
-          <button class="editBtn btn btn-info">Edit</button>
-          <button class="saveBtn btn btn-success">Save</button>
-          <button class="deleteBtn btn btn-danger">Delete</button>
-        </li>
-        `; 	
-	}).join(''); //.join() is going to take the array to string
-
-};
+// CHECKBOX FUNCTIONS
 
 function toggleTaskCompleted(e){
 	if (!e.target.matches('input[type=checkbox]')) return; // skip if event trigger is not an input element
@@ -77,6 +61,8 @@ function toggleTaskCompleted(e){
 	}
 }
 
+
+// BUTTON FUNCTIONS
 
 function buttons(e) {
 	if(e.target.tagName === 'BUTTON'){
