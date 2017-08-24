@@ -46,5 +46,7 @@ function whichStorage(storage) {
 function whichParent(parentNode){
 	if(parentNode.classList.contains('tasks')){
 		return false;
+	}else {
+		return true;
 	}
 }
