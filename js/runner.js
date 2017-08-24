@@ -3,6 +3,7 @@
 populateList(todoTasks, taskList);
 populateList(completedTodos, completedTask);
 getCurrentDate();
+setInterval(generateQuote(quote), 5000);
 
 addItemForm.addEventListener('submit', addNewItem);
 // addItemForm.addEventListener('submit', toggleHeaders);

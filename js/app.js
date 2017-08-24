@@ -4,7 +4,32 @@ const taskList = document.querySelector('.tasks');
 const completedTask = document.querySelector('.completedTask');
 const todoTasks = JSON.parse(localStorage.getItem('todolist')) || [];
 const completedTodos = JSON.parse(localStorage.getItem('completedlist')) || [];
+const displayQuote = document.querySelector('#getQuote');
 
+// RANDOM QUOTE GENERATOR
+let quote = [
+	{
+		quote: "Your a wizzard Harry.. prepare to die",
+		author: "Hagrid"
+	},
+	{
+		quote: "Luke, I'am your father.. prepare to die",
+		author : "Darth Vader"
+	},
+	{
+		quote: "Hello, my name is Inigo Montoya, you killed my father.. prepare to die",
+		author : "Inigo Montoya"
+	},
+	{
+		quote: "It is possible to commit no mistakes and still lose. That is not a weakness; that is life",
+		author : "Jean Luc Picard"
+	}
+	];
+
+function generateQuote(quoteArray){
+	const randomQuote = Math.floor(Math.random() * (quoteArray.length));
+	displayQuote.innerHTML = `<p class="quote">"${quoteArray[randomQuote].quote}" - ${quoteArray[randomQuote].author}</p>`;
+}
 
 // ADD ITEM FUNCTION
 

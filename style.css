@@ -44,6 +44,10 @@ button {
 	display: none;
 }
 
+.quote {
+	font-style: italic;
+}
+
 footer {
 	text-align: center;
 	margin-top: 50px;
