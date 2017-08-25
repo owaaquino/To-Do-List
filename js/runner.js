@@ -3,15 +3,15 @@
 populateList(todoTasks, taskList);
 populateList(completedTodos, completedTask);
 getCurrentDate();
-setInterval(generateQuote(quote), 5000);
+generateQuote(quote);
 
 addItemForm.addEventListener('submit', addNewItem);
-// addItemForm.addEventListener('submit', toggleHeaders);
+// grandParent.addEventListener('submit', toggleClassHeader);
 
 taskList.addEventListener('click', buttons);
 completedTask.addEventListener('click', buttons);
 
 taskList.addEventListener('click', toggleTaskCompleted);
-// taskList.addEventListener('click', toggleHeaders);
+// grandParent.addEventListener('click', toggleClassHeader);
 completedTask.addEventListener('click', toggleTaskCompleted);
-// completedTask.addEventListener('click', toggleHeaders);
+// grandParent.addEventListener('click', toggleClassHeader);

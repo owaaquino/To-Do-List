@@ -5,10 +5,35 @@ function getCurrentDate(){
 	date.innerHTML = `<p>${dateToday}</p>`;
 }
 
-function toggleHeaders(){
-	todoTasks.length <= 0 ?	taskList.parentNode.style.display = 'none' : 'block' ;
-	completedTodos.length <= 0 ? completedTask.parentNode.style.display = 'none' : 'block' ;
-}
+
+// Toggle headers if empty
+
+// function toggleClassHeader(e){	
+// 	if(e.target.tagName === 'BUTTON'){
+// 		if(todoTasks.length <= 0){
+// 			taskList.parentNode.classList.remove('ass');
+// 		}else{
+// 			taskList.parentNode.classList.add('ass');
+// 		}
+
+// 		if(completedTodos.length <= 0){
+// 			completedTask.parentNode.classList.remove('ass');
+// 		}else{
+// 			completedTask.parentNode.classList.add('ass');
+// 		}
+// 	}
+// }
+
+// function headerDefault(){	
+// 		todoTasks.length <= 0 ?	taskList.parentNode.style.display = 'none' : 'block' ;
+// 		completedTodos.length <= 0 ? completedTask.parentNode.style.display = 'none' : 'block' ;
+// }
+
+// function toggleHeaders(e){
+// 	if(e.target.tagName === 'BUTTON'){
+// 		headerDefault();
+// 	}
+// }
 
 //populoateList takes two params one for the items that needed to be displayed and another for where that items you want to display in the page. 
 function populateList(todos = [], todoList){ // todos = [] ES6 - make the items to be default array to blank incase there are no value inside 
